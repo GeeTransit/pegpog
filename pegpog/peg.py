@@ -61,7 +61,7 @@ from .rule import *
 __all__ = ["create_rule", "create_grammar"]
 
 # This holds the rules to parse PEG grammars. Note that this grammar has no
-# error messages.
+# error messages. A grammar for PEG that has error messages is in peg.peg.
 grammar = Grammar(rules={
     "grammar_start": Join(
         Reference("_"),
@@ -323,7 +323,15 @@ def create_grammar(string):
     """Creates a grammar from a string"""
     return walk(grammar.parse(string, start="grammar_start")[0])
 
-def test_rule_str():
+def test_parse_grammar():
+    first = create_grammar(str(grammar))
+    second = create_grammar(str(first))
+    assert str(first) == str(second)
+    assert first == second
+
+def test_parse_rule():
     for name, rule in grammar.rules.items():
-        assert str(create_rule(str(rule))) == str(rule)
-    assert str(create_grammar(str(grammar))) == str(grammar)
+        first = create_rule(str(rule))
+        second = create_rule(str(first))
+        assert str(first) == str(second)
+        assert first == second
