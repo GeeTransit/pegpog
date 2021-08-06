@@ -1,4 +1,5 @@
 # pegpog
+
 A simple PEG parser
 
 ## Quickstart
@@ -6,13 +7,14 @@ A simple PEG parser
 Run `python quicktest.py`, put the following in the Grammar textbox, put a
 simple math expression in the Input textbox, and hit the Parse button.
 
-	start <- _ expression _ !.;
+    start <- _ expression _ !.;
     expression <- { `expression` factor (_ '+-' _ factor)+ } | factor;
     factor <- { `factor` term (_ '*/' _ term)+ } | term;
     term <- :"(" _ expression _ ":)" | { `num` ~'0123456789'+ };
     _ <- :" "*;
 
 ## Tutorial
+
 Let's create a simple calculator. We'll try to parse `"6 + 9*42 - (0)"`.
 Here are the rules that we would start with:
 
@@ -238,3 +240,4 @@ Here's the result with all syntax `(,)` for reference:
 
 One can turn the walker function into a class that uses getattr to act on
 different nodes but I'm content with the walker being a function.
+
