@@ -65,7 +65,10 @@ def on_parse():
         title = "Code Result Error"
         result = scope.get("tree", None)
         title = "Output Error"
-        output_string = pprint.pformat(result, indent=2)  # pretty print result
+        if isinstance(result, str):
+            output_string = result
+        else:
+            output_string = pprint.pformat(result, indent=2)  # pretty print
         output_text["state"] = "normal"  # temporarily allow editing
         output_text.delete("1.0", "end")  # remove preexisting output
         output_text.insert("1.0", output_string)  # add result into output
