@@ -28,6 +28,12 @@ input_text = tkinter.Text(input_frame, height=8, width=60)
 input_text.configure(undo=True, borderwidth=0)
 input_text.pack(expand=True, fill="both")
 
+# Code to run with the parse tree
+code_frame = tkinter.LabelFrame(panes, text="Code")
+code_text = tkinter.Text(code_frame, height=8, width=60)
+code_text.configure(undo=True, borderwidth=0)
+code_text.pack(expand=True, fill="both")
+
 # This sets up the output textbox and the parse button
 output_frame = tkinter.LabelFrame(panes, text="Result")
 output_text = tkinter.Text(output_frame, height=1, width=60)
@@ -50,6 +56,14 @@ def on_parse():
         end_string = input_text.get("1.0", "end")[:-1]  # remove last newline
         title = "Input Parse Error"
         result = grammar.parse(end_string)
+        title = "Code Retrieve Error"
+        code = code_text.get("1.0", "end")
+        title = "Code Prepare Error"
+        scope = {"tree": result}
+        title = "Code Error"
+        exec(code, scope)
+        title = "Code Result Error"
+        result = scope.get("tree", None)
         title = "Output Error"
         output_string = pprint.pformat(result, indent=2)  # pretty print result
         output_text["state"] = "normal"  # temporarily allow editing
@@ -65,12 +79,14 @@ parse_button.configure(command=on_parse)  # set callback function
 # Make parse button not expand on resize (weight=0)
 output_frame.rowconfigure(0, weight=1)
 output_frame.rowconfigure(1, weight=0)
+output_frame.rowconfigure(2, weight=0)
 output_frame.columnconfigure(0, weight=1)
 
 # Make the output not expand on resize (stretch="never")
 # It can still be manually resized though
 panes.add(grammar_frame, stretch="always")
 panes.add(input_frame, stretch="always")
+panes.add(code_frame, stretch="always")
 panes.add(output_frame, stretch="never")
 
 root.mainloop()
