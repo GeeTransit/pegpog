@@ -139,6 +139,7 @@ Now we have an even cleaner tree.
 Here is my walker function for this step as reference. Note that you need to
 pass in the first item inside the result because the expression rule packs the
 result inside a tuple.
+
 ```python
     def walk(node):
         if isinstance(node, str):
@@ -157,7 +158,8 @@ result inside a tuple.
             elif op == "/":
                 value /= other
         return value
-```       
+```
+
 The answer's 384 by the way. Anyways, this walker function works, but
 improvements can be made. Instead of an `isinstance` check, we can pack it in
 another tuple and use the inject syntax to our advantage. Take a look:
@@ -178,8 +180,10 @@ form `('num', string)`.
 Our walker function can now check whether the first item is `num` and act
 accordingly.
 
+```python
     if node[0] == "num":
         return int(node[1])
+```
 
 We can extend this to our expressions and factors too. Instead of checking the
 operator, we can have the first item be either `expression` or `factor` and
@@ -189,6 +193,7 @@ then act on them separately.
     factor <- { `factor` term (_ '*/' _ term)+ } | term;
 
 Our walker function can now look like this:
+
 ```python
     if node[0] == "expression":
         node = list(node[1:])
@@ -213,6 +218,7 @@ Our walker function can now look like this:
                 value /= other
         return value
 ```
+
 This creates a parallel between the parsing and the walking and ensures that
 the operators inside each type of rule are actually the correct ones.
 
