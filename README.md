@@ -141,23 +141,23 @@ pass in the first item inside the result because the expression rule packs the
 result inside a tuple.
 
 ```python
-    def walk(node):
-        if isinstance(node, str):
-            return int(node)
-        node = list(node)
-        value = walk(node.pop(0))
-        while node:
-            op = node.pop(0)
-            other = walk(node.pop(0))
-            if op == "+":
-                value += other
-            elif op == "-":
-                value -= other
-            elif op == "*":
-                value *= other
-            elif op == "/":
-                value /= other
-        return value
+def walk(node):
+    if isinstance(node, str):
+        return int(node)
+    node = list(node)
+    value = walk(node.pop(0))
+    while node:
+        op = node.pop(0)
+        other = walk(node.pop(0))
+        if op == "+":
+            value += other
+        elif op == "-":
+            value -= other
+        elif op == "*":
+            value *= other
+        elif op == "/":
+            value /= other
+    return value
 ```
 
 The answer's 384 by the way. Anyways, this walker function works, but
@@ -181,8 +181,8 @@ Our walker function can now check whether the first item is `num` and act
 accordingly.
 
 ```python
-    if node[0] == "num":
-        return int(node[1])
+if node[0] == "num":
+    return int(node[1])
 ```
 
 We can extend this to our expressions and factors too. Instead of checking the
@@ -195,28 +195,28 @@ then act on them separately.
 Our walker function can now look like this:
 
 ```python
-    if node[0] == "expression":
-        node = list(node[1:])
-        value = walk(node.pop(0))
-        while node:
-            op = node.pop(0)
-            other = walk(node.pop(0))
-            if op == "+":
-                value += other
-            elif op == "-":
-                value -= other
-        return value
-    if node[0] == "factor":
-        node = list(node[1:])
-        value = walk(node.pop(0))
-        while node:
-            op = node.pop(0)
-            other = walk(node.pop(0))
-            if op == "*":
-                value *= other
-            elif op == "/":
-                value /= other
-        return value
+if node[0] == "expression":
+    node = list(node[1:])
+    value = walk(node.pop(0))
+    while node:
+        op = node.pop(0)
+        other = walk(node.pop(0))
+        if op == "+":
+            value += other
+        elif op == "-":
+            value -= other
+    return value
+if node[0] == "factor":
+    node = list(node[1:])
+    value = walk(node.pop(0))
+    while node:
+        op = node.pop(0)
+        other = walk(node.pop(0))
+        if op == "*":
+            value *= other
+        elif op == "/":
+            value /= other
+    return value
 ```
 
 This creates a parallel between the parsing and the walking and ensures that
